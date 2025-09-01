@@ -9,8 +9,6 @@ export default function AppLayout({ children, variant = 'user' }) {
   const [open, setOpen] = useState(false);
   // const nav = useNavigate();
 
-
-
   // Menus (match your spec)
   const items = useMemo(() => {
     if (variant === 'admin') {
@@ -74,8 +72,6 @@ export default function AppLayout({ children, variant = 'user' }) {
                 <DrawerLink key={i.to} {...i} />
               ))}
             </div>
-
-           
           </div>
 
           <div className="flex-1" onClick={() => setOpen(false)} />

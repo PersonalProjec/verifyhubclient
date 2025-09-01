@@ -26,6 +26,8 @@ import AdminUserDetail from './pages/admin/UserDetail';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
+import PublicVerification from './pages/PublicVerification';
+import PublicAttest from './pages/PublicAttest';
 
 export default function App() {
   const { pathname } = useLocation();
@@ -63,6 +65,8 @@ export default function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/v/:code" element={<PublicVerification />} />
+        <Route path="/attest" element={<PublicAttest />} />
 
         {/* User protected */}
         <Route

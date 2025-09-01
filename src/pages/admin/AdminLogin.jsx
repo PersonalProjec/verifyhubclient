@@ -20,7 +20,9 @@ export default function AdminLogin() {
       notify.success('Login successful', 'success');
       nav('/admin');
     } catch (e) {
-      notify.error(e?.response?.data?.error || 'Login failed. Please try again.');
+      notify.error(
+        e?.response?.data?.error || 'Login failed. Please try again.'
+      );
     }
   };
 

@@ -15,7 +15,7 @@ export default function AdminSidebar() {
 
   const logout = () => {
     localStorage.removeItem('adminToken');
-     const userToken = localStorage.getItem('token');
+    const userToken = localStorage.getItem('token');
     setToken(userToken || null);
     notify.success('Logged out successfully');
     nav('/admin/login');

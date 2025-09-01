@@ -26,7 +26,7 @@ export default function Users() {
   };
 
   useEffect(() => {
-    fetchUsers(page, search); /* eslint-disable-next-line */
+    fetchUsers(page, search);
   }, []);
 
   const onSearch = (e) => {
