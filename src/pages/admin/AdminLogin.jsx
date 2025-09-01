@@ -4,6 +4,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { api, setToken } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
+import { notify } from '../../lib/toast';
 
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
@@ -16,9 +17,10 @@ export default function AdminLogin() {
       const { data } = await api.post('/admin/login', { username, password });
       setToken(data.token);
       localStorage.setItem('adminToken', data.token);
+      notify.success('Login successful', 'success');
       nav('/admin');
     } catch (e) {
-      alert(e.response?.data?.error || 'Error');
+      notify.error(e?.response?.data?.error || 'Login failed. Please try again.');
     }
   };
 

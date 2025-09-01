@@ -1,26 +1,52 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { NavLink } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import AdminSidebar from './AdminSidebar';
 import Topbar from './Topbar';
-import { setToken } from '../lib/api';
-import { useNavigate } from 'react-router-dom';
-import { notify } from '../lib/toast';
+import Logo from './Logo';
 
 export default function AppLayout({ children, variant = 'user' }) {
   const [open, setOpen] = useState(false);
-  const nav = useNavigate();
+  // const nav = useNavigate();
 
-  const logout = () => {
-    const isAdmin = variant === 'admin';
-    if (isAdmin) localStorage.removeItem('adminToken');
-    else localStorage.removeItem('token');
-    localStorage.removeItem('token');
-    localStorage.removeItem('adminToken');
-    setToken(null);
-    setOpen(false);
-    notify.info('Logged out successfully');
-    nav(isAdmin ? '/admin/login' : '/login');
-  };
+
+
+  // Menus (match your spec)
+  const items = useMemo(() => {
+    if (variant === 'admin') {
+      return [
+        { to: '/admin', label: 'Overview', end: true },
+        { to: '/admin/users', label: 'Users' },
+        { to: '/admin/providers', label: 'Providers' },
+        { to: '/admin/change-password', label: 'Change Password' },
+      ];
+    }
+    return [
+      { to: '/dashboard', label: 'Overview', end: true },
+      { to: '/dashboard/verify', label: 'Verify' },
+      { to: '/dashboard/status', label: 'Verification Status' },
+      { to: '/dashboard/payments', label: 'Payment History' },
+      { to: '/dashboard/profile', label: 'Profile' },
+      { to: '/dashboard/change-password', label: 'Change Password' },
+    ];
+  }, [variant]);
+
+  const DrawerLink = ({ to, label, end }) => (
+    <NavLink
+      to={to}
+      end={end}
+      onClick={() => setOpen(false)}
+      className={({ isActive }) =>
+        `block px-3 py-2 rounded-xl transition-colors ${
+          isActive
+            ? 'bg-brand-500/20 text-white'
+            : 'hover:bg-white/5 text-white/80'
+        }`
+      }
+    >
+      {label}
+    </NavLink>
+  );
 
   return (
     <div className="min-h-screen flex">
@@ -30,6 +56,12 @@ export default function AppLayout({ children, variant = 'user' }) {
       {open && (
         <div className="md:hidden fixed inset-0 z-30 flex">
           <div className="w-64 bg-ink border-r border-white/10 p-4 flex flex-col">
+            {/* Header with logo */}
+            <div className="mb-3">
+              <Logo variant={variant} size="sm" />
+            </div>
+            <div className="border-b border-white/10 mb-3" />
+
             <button
               onClick={() => setOpen(false)}
               className="mb-4 rounded-lg bg-white/5 px-3 py-2"
@@ -38,58 +70,14 @@ export default function AppLayout({ children, variant = 'user' }) {
             </button>
 
             <div className="space-y-2 flex-1">
-              {variant === 'admin' ? (
-                <>
-                  <a
-                    href="/admin"
-                    className="block px-3 py-2 rounded-xl hover:bg-white/5"
-                  >
-                    Overview
-                  </a>
-                  <a
-                    href="/admin/users"
-                    className="block px-3 py-2 rounded-xl hover:bg-white/5"
-                  >
-                    Users
-                  </a>
-                  <a
-                    href="/admin/providers"
-                    className="block px-3 py-2 rounded-xl hover:bg-white/5"
-                  >
-                    Providers
-                  </a>
-                </>
-              ) : (
-                <>
-                  <a
-                    href="/dashboard"
-                    className="block px-3 py-2 rounded-xl hover:bg-white/5"
-                  >
-                    Overview
-                  </a>
-                  <a
-                    href="/dashboard/requests"
-                    className="block px-3 py-2 rounded-xl hover:bg-white/5"
-                  >
-                    Requests
-                  </a>
-                  <a
-                    href="/dashboard/profile"
-                    className="block px-3 py-2 rounded-xl hover:bg-white/5"
-                  >
-                    Profile
-                  </a>
-                </>
-              )}
+              {items.map((i) => (
+                <DrawerLink key={i.to} {...i} />
+              ))}
             </div>
 
-            <button
-              onClick={logout}
-              className="w-full px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/90"
-            >
-              Logout
-            </button>
+           
           </div>
+
           <div className="flex-1" onClick={() => setOpen(false)} />
         </div>
       )}

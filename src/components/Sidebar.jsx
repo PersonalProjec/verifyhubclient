@@ -16,8 +16,8 @@ export default function Sidebar() {
 
   const logout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('adminToken');
-    setToken(null);
+    const adminToken = localStorage.getItem('adminToken');
+    setToken(adminToken || null);
     nav('/login');
   };
 

@@ -20,7 +20,9 @@ import ChangePassword from './pages/dashboard/ChangePassword';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsers from './pages/admin/Users';
+import AdminProviders from './pages/admin/Providers';
 import AdminChangePassword from './pages/admin/ChangePassword';
+import AdminUserDetail from './pages/admin/UserDetail';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
@@ -126,6 +128,22 @@ export default function App() {
           element={
             <AdminProtectedRoute>
               <AdminUsers />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users/:id"
+          element={
+            <AdminProtectedRoute>
+              <AdminUserDetail />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/providers"
+          element={
+            <AdminProtectedRoute>
+              <AdminProviders />
             </AdminProtectedRoute>
           }
         />

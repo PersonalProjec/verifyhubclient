@@ -1,10 +1,12 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { setToken } from '../lib/api';
 import Logo from './Logo';
+import { notify } from '../lib/toast';
 
 const items = [
   { to: '/admin', label: 'Overview', end: true },
   { to: '/admin/users', label: 'Users' },
+  { to: '/admin/providers', label: 'Providers' },
   { to: '/admin/change-password', label: 'Change Password' },
 ];
 
@@ -13,8 +15,9 @@ export default function AdminSidebar() {
 
   const logout = () => {
     localStorage.removeItem('adminToken');
-    localStorage.removeItem('token');
-    setToken(null);
+     const userToken = localStorage.getItem('token');
+    setToken(userToken || null);
+    notify.success('Logged out successfully');
     nav('/admin/login');
   };
 
