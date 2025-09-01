@@ -7,8 +7,14 @@ export default function Landing() {
     <div className="min-h-screen">
       {/* Hero */}
       <header className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(43,132,255,0.2),transparent_40%),radial-gradient(circle_at_90%_30%,rgba(43,132,255,0.15),transparent_35%)]" />
-        <div className="max-w-6xl mx-auto px-6 pt-24 pb-16 text-center">
+        {/* put the overlay behind & ignore clicks */}
+        <div
+          className="absolute inset-0 -z-10 pointer-events-none
+               bg-[radial-gradient(circle_at_10%_10%,rgba(43,132,255,0.2),transparent_40%),radial-gradient(circle_at_90%_30%,rgba(43,132,255,0.15),transparent_35%)]"
+        />
+
+        {/* lift content above just in case */}
+        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-16 text-center">
           <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
             Universal <span className="text-brand-500">Certificate</span>{' '}
             Verification Hub
@@ -17,12 +23,15 @@ export default function Landing() {
             Verify WAEC/NECO tokens, NPC attestations, marriage records, and
             more — from a single, secure portal.
           </p>
+
           <div className="mt-8 flex gap-4 justify-center">
             <Link to="/register">
               <Button>Get Started</Button>
             </Link>
+
+            {/* if you meant to scroll to features, keep #features; if you meant login, use <Link to="/login"> */}
             <a
-              href="#features"
+              href="/login"
               className="px-4 py-2 rounded-xl border border-white/15 hover:bg-white/5"
             >
               Learn More

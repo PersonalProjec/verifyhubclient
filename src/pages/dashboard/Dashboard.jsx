@@ -1,5 +1,5 @@
-import AppLayout from '../components/AppLayout';
-import Card from '../components/Card';
+import AppLayout from '../../components/AppLayout';
+import Card from '../../components/Card';
 
 export default function Dashboard() {
   return (

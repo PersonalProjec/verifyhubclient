@@ -3,6 +3,7 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import { api } from '../lib/api';
+import { notify } from '../lib/toast';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
@@ -15,13 +16,15 @@ export default function Register() {
     setLoading(true);
     try {
       await api.post('/auth/register', form);
+      notify.success('Account created. Verification code sent!');
       nav(`/verify-email?email=${encodeURIComponent(form.email)}`);
-    } catch (e) {
-      alert(e.response?.data?.error || 'Error');
     } finally {
+      // errors are toastified by axios interceptor
       setLoading(false);
     }
   };
+
+  const disabled = loading || !form.email || !form.password;
 
   return (
     <div className="max-w-md mx-auto pt-16 px-4">
@@ -42,7 +45,7 @@ export default function Register() {
               setForm((f) => ({ ...f, password: e.target.value }))
             }
           />
-          <Button disabled={loading} className="w-full">
+          <Button disabled={disabled} className="w-full">
             {loading ? 'Please wait…' : 'Register'}
           </Button>
         </form>
@@ -50,6 +53,11 @@ export default function Register() {
           Already have an account?{' '}
           <Link className="text-brand-400" to="/login">
             Login
+          </Link>
+        </p>
+        <p className="text-sm text-white/60">
+          <Link className="text-brand-400" to="/forgot-password">
+            Forgot password?
           </Link>
         </p>
       </Card>

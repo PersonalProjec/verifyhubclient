@@ -3,22 +3,19 @@ import { setToken } from '../lib/api';
 import Logo from './Logo';
 
 const items = [
-  { to: '/dashboard', label: 'Overview', end: true },
-  { to: '/dashboard/verify', label: 'Verify' },
-  { to: '/dashboard/status', label: 'Verification Status' },
-  { to: '/dashboard/payments', label: 'Payment History' },
-  { to: '/dashboard/profile', label: 'Profile' },
-  { to: '/dashboard/change-password', label: 'Change Password' },
+  { to: '/admin', label: 'Overview', end: true },
+  { to: '/admin/users', label: 'Users' },
+  { to: '/admin/change-password', label: 'Change Password' },
 ];
 
-export default function Sidebar() {
+export default function AdminSidebar() {
   const nav = useNavigate();
 
   const logout = () => {
-    localStorage.removeItem('token');
     localStorage.removeItem('adminToken');
+    localStorage.removeItem('token');
     setToken(null);
-    nav('/login');
+    nav('/admin/login');
   };
 
   const base =
@@ -28,7 +25,7 @@ export default function Sidebar() {
   return (
     <aside className="hidden md:flex md:flex-col w-64 shrink-0 gap-2 p-4">
       <div className="mb-3">
-        <Logo variant="user" size="md" />
+        <Logo variant="admin" size="md" />
       </div>
       <div className="border-b border-white/10 mb-3" />
 
