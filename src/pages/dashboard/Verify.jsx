@@ -5,8 +5,10 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { api } from '../../lib/api';
 import { notify } from '../../lib/toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function Verify() {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [type, setType] = useState('Generic');
   const [issuerEmail, setIssuerEmail] = useState('');
@@ -20,6 +22,20 @@ export default function Verify() {
       notify.error('Please select a file');
       return;
     }
+    try {
+      const { data: me } = await api.get('/billing/me');
+      const have = Number(me?.credits || 0);
+      const need = 5; // same as backend for now; later we can request price by type
+      if (have < need) {
+        notify.error(
+          `You need ${need} credits (you have ${have}). Please purchase first.`
+        );
+        navigate('/dashboard/payments');
+        return;
+      }
+    } catch {
+      // If this fails, we still attempt upload and let backend enforce.
+    }
     setUploading(true);
     try {
       const fd = new FormData();
@@ -32,7 +48,20 @@ export default function Verify() {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setResult(data);
-      notify.success('Uploaded. Verification record created.');
+      notify.success(
+        `Verification created. (-${data.cost} credits, left: ${
+          data.creditsLeft ?? '—'
+        })`
+      );
+    } catch (e) {
+      if (e.response?.status === 402) {
+        const need = e.response?.data?.required ?? 5;
+        const have = e.response?.data?.credits ?? 0;
+        notify.error(`Payment required: ${need} credits (you have ${have}).`);
+        navigate('/dashboard/payments');
+        return;
+      }
+      notify.error(e.response?.data?.error || 'Upload failed');
     } finally {
       setUploading(false);
     }
@@ -56,11 +85,11 @@ export default function Verify() {
           </label>
 
           <label className="block space-y-1">
-            <span className="text-sm text-white/80">Type</span>
+            <span className="text-sm text-white/8">Type</span>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full rounded-xl md:bg-slate-800 bg-white/5 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               <option>Generic</option>
               <option>WAEC</option>
