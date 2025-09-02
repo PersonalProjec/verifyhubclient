@@ -28,6 +28,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 import PublicVerification from './pages/PublicVerification';
 import PublicAttest from './pages/PublicAttest';
+import VerifyAPI from './pages/dashboard/VerifyAPI';
 
 export default function App() {
   const { pathname } = useLocation();
@@ -93,6 +94,15 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/dashboard/verify-api"
+          element={
+            <ProtectedRoute>
+              <VerifyAPI />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/dashboard/payments"
           element={
